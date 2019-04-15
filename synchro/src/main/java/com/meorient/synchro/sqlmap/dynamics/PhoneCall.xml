@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!--【Dynamic 测试】sql -->
+<mapper namespace="com.meorient.synchro.dao.dynamics.DyPhoneCallDao">
+
+	<!-- ==============================基础操作======================================= -->
+	<!--根据条件得到列表 -->
+	<select id="selectList" resultMap="pcMap">
+		<![CDATA[ 
+			select top ${rowSize} new_ucid,ownerIdName,new_tonum, new_fromnum,description,
+			new_recordlink,new_begintime,new_connectTime,new_dialtime 
+			from (select row_number() over(order by new_ucid asc) as rownumber,* 
+			from PhoneCall 
+		]]> 
+			where CreatedOn > '${beginTime}' 
+		<if test="endTime != null and endTime !=''"><![CDATA[ and CreatedOn < '${endTime}' ]]> </if>
+		<![CDATA[ 	
+			) temp_row 
+			where rownumber > ${rowNum} 
+		]]>
+	</select>
+	<resultMap type="com.meorient.synchro.pojo.dynamics.DyPhoneCall" id="pcMap">
+        <id property="new_ucid" column="new_ucid" />
+        <!-- 定义普通属性 -->
+        <result property="ownerIdName" column="OwnerIdName"/>
+        <result property="new_tonum" column="new_tonum"/>
+        <result property="new_fromnum" column="new_fromnum"/>
+        <result property="description" column="description"/>
+        <result property="new_recordlink" column="new_recordlink"/>
+        <result property="new_begintime" column="new_begintime"/>
+        <result property="new_connectTime" column="new_connectTime"/>
+        <result property="new_dialtime" column="new_dialtime"/>
+    </resultMap>
+</mapper> 

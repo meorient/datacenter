@@ -1,0 +1,26 @@
+common:
+    masterDB:
+        url: 127.0.00.1
+        port: 3306
+        userName: root
+        password: root
+    sqlServer:
+        url: 10.20.11.254
+        port: 1433
+        userName: sa
+        password: "p@ssw0rd"
+        database: DC
+    netsuite:
+        url: odbcserver.na2.netsuite.com
+        port: 1708
+        userName: DataMigration@meorient.com
+        password: "@^*gLGyGCp"
+    jedis:
+        hosts:
+           host_1: 127.0.0.1:6379
+    sysConfig: 
+        cfgResAndSessionParam: #资源与session参数
+            sessionExp: 7200 #session过期时长,单位：分钟
+            resRootUrl: #图片等资源存放站点根目录
+            releaseMode: false #是否发布模式
+            authTimeLimit: 5 #签名验证超时时间限制 单位：分钟 

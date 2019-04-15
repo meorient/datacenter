@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!--【Dynamic 测试】sql -->
+<mapper namespace="com.meorient.synchro.dao.ns.NSDepartmentDao">
+
+	<!-- ==============================基础操作======================================= -->
+	<!--根据条件得到列表 -->
+	<select id="selectList" parameterType="com.meorient.synchro.pojo.ns.NSDepartment" resultType="com.meorient.synchro.pojo.ns.NSDepartment">
+		<![CDATA[ 
+			select DEPARTMENT_ID , NAME , PARENT_ID from Departments
+		]]>
+	</select>
+</mapper> 

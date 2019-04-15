@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!--【phonecall 】sql -->
+<mapper namespace="com.meorient.synchro.dao.sync.PhoneCallDao">
+
+	<!-- ==============================基础操作======================================= -->
+	<!--根据条件得到列表 -->
+	<select id="selectList" parameterType="com.meorient.synchro.pojo.sync.PhoneCall" resultType="com.meorient.synchro.pojo.sync.PhoneCall">
+		<![CDATA[ 
+			SELECT id,sourceId,uId,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
+				callTime,connectTime,disconnectTime,callStatus,timestampdiff(second,connectTime,disconnectTime) connectSeconds
+			FROM phonecall 
+		]]>
+	</select>
+
+	<!--根据id得到记录 -->
+	<select id="selectUnique" parameterType="com.meorient.synchro.pojo.sync.PhoneCall" resultType="com.meorient.synchro.pojo.sync.PhoneCall">
+		<![CDATA[ 
+			SELECT id,sourceId,uId,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
+				callTime,connectTime,disconnectTime,callStatus
+			FROM phonecall where id = #{id}
+		]]>
+	</select>
+
+	<!-- 新增记录 -->
+	<insert id="insert" parameterType="com.meorient.synchro.pojo.sync.PhoneCall" 
+		useGeneratedKeys="true"	keyProperty="id" keyColumn="id">
+		<![CDATA[ 
+			INSERT INTO phonecall (
+			    id,sourceId,uid,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
+				callTime,connectTime,disconnectTime,callStatus,userName
+			) VALUES (
+				#{id},#{sourceId},#{uid},#{userId},#{recordText},#{recordUrl},#{fromTel},#{toTel},#{directType},#{extTel},
+				#{callTime},#{connectTime},#{disconnectTime},#{callStatus},#{userName}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量新增记录 -->
+	<insert id="insertList" parameterType="com.meorient.synchro.pojo.sync.PhoneCall">
+		<![CDATA[ 
+			INSERT INTO phonecall (
+			    id,sourceId,uid,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
+				callTime,connectTime,disconnectTime,callStatus,userName
+			) VALUES (
+				#{id},#{sourceId},#{uid},#{userId},#{recordText},#{recordUrl},#{fromTel},#{toTel},#{directType},#{extTel},
+				#{callTime},#{connectTime},#{disconnectTime},#{callStatus},#{userName}
+			)
+		]]>
+	</insert>
+	
+	<!-- 修改记录 -->
+	<update id="update" parameterType="com.meorient.synchro.pojo.sync.PhoneCall">
+		<![CDATA[ UPDATE phonecall]]>
+		<set>
+	 		<if test="id != null"><![CDATA[ id = #{id},]]></if>
+	 		<if test="sourceId != null and sourceId != ''"><![CDATA[ sourceId = #{sourceId},]]></if>
+	 		<if test="uId != null and uId != ''"><![CDATA[ uId = #{uId},]]></if>
+	 		<if test="userId != null"><![CDATA[ userId = #{userId},]]></if>
+	 		<if test="fromTel != null and fromTel != ''"><![CDATA[ fromTel = #{fromTel},]]></if>
+	 		<if test="toTel != null and toTel != ''"><![CDATA[ toTel = #{toTel},]]></if>
+	 		<if test="directType != null"><![CDATA[ directType = #{directType},]]></if>
+	 		<if test="extTel != null and extTel != ''"><![CDATA[ extTel = #{extTel},]]></if>
+	 		<if test="callTime != null"><![CDATA[ callTime = #{callTime},]]></if>
+	 		<if test="connectTime != null"><![CDATA[ connectTime = #{connectTime},]]></if>
+	 		<if test="disconnectTime != null"><![CDATA[ disconnectTime = #{disconnectTime},]]></if>
+	 		<if test="callStatus != null"><![CDATA[ callStatus = #{callStatus},]]></if>
+		</set>
+		 <![CDATA[ WHERE id = #{id} ]]>
+	</update>
+	
+	<!-- 删除记录 -->
+	<update id="delete" parameterType="com.meorient.synchro.pojo.sync.PhoneCall">
+		<![CDATA[ DELETE FROM phonecall where id = #{id} ]]>
+	</update>
+	
+	<!-- 修正userId为系统主键id -->
+	<update id="fixUserId" parameterType="com.meorient.synchro.pojo.sync.PhoneCall">
+		<![CDATA[ 
+			update phonecall pc left join user u
+			on pc.userName = u.name set pc.userId = u.id
+			where userId is null
+		]]>
+	</update>
+	
+	<!-- 修正重复名称问题 -->
+	<update id="fixDuplicated" parameterType="com.meorient.synchro.pojo.sync.PhoneCall">
+		<![CDATA[ 
+			update department d1
+			join (select max(id) id from department b group by `name` having count(name)=2) d2
+			on d1.id = d2.id
+			set d1.name = CONCAT(d1.name,"(2)")
+		]]>
+	</update>
+</mapper> 

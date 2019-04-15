@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!--【department 】sql -->
+<mapper namespace="com.meorient.phonecall.dao.department.DepartmentDao">
+
+	<!-- ==============================基础操作======================================= -->
+	<!--根据条件得到列表 -->
+	<select id="selectList" parameterType="com.meorient.phonecall.pojo.department.Department" resultType="com.meorient.phonecall.pojo.department.Department">
+		<![CDATA[ 
+			SELECT id,managerId,managerName,name,parentId,shareMark 
+			FROM department WHERE FIND_IN_SET(id,departments(#{id}));
+		]]>
+	</select>
+
+	<!--根据id得到记录 -->
+	<select id="selectUnique" parameterType="com.meorient.phonecall.pojo.department.Department" resultType="com.meorient.phonecall.pojo.department.Department">
+		<![CDATA[ 
+			SELECT id,managerId,managerName,name,parentId
+			FROM department where id = #{id}
+		]]>
+	</select>
+
+	<!-- 新增记录 -->
+	<insert id="insert" parameterType="com.meorient.phonecall.pojo.department.Department" 
+		useGeneratedKeys="true"	keyProperty="id" keyColumn="id">
+		<![CDATA[ 
+			INSERT INTO department (
+			    id,managerId,managerName,name,parentId,shareMark
+			) VALUES (
+				#{id},#{managerId},#{managerName},#{name},#{parentId},#{shareMark}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量新增记录 -->
+	<insert id="insertList" parameterType="com.meorient.phonecall.pojo.department.Department">
+		<![CDATA[ 
+			INSERT INTO department (
+			    id,managerId,managerName,name,parentId
+			) VALUES (
+				#{id},#{managerId},#{managerName},#{name},#{parentId},#{shareMark}
+			)
+		]]>
+	</insert>
+	
+	<!-- 修改记录 -->
+	<update id="update" parameterType="com.meorient.phonecall.pojo.department.Department">
+		<![CDATA[ UPDATE department]]>
+		<set>
+	 		<if test="id != null"><![CDATA[ id = #{id},]]></if>
+	 		<if test="managerId != null"><![CDATA[ managerId = #{managerId},]]></if>
+	 		<if test="managerName != null and managerName != ''"><![CDATA[ managerName = #{managerName},]]></if>
+	 		<if test="name != null and name != ''"><![CDATA[ name = #{name},]]></if>
+	 		<if test="parentId != null"><![CDATA[ parentId = #{parentId},]]></if>
+		</set>
+		 <![CDATA[ WHERE id = #{id} ]]>
+	</update>
+	
+	<!-- 删除记录 -->
+	<update id="delete" parameterType="com.meorient.phonecall.pojo.department.Department">
+		<![CDATA[ DELETE FROM department where id = #{id} ]]>
+	</update>
+	
+	<!-- ==============================非基础操作======================================= -->
+	<!--根据部门得到可分享列表 -->
+	<select id="getShareAbleUserList" resultMap="departmentMap">
+		<![CDATA[ 
+			select d1.id,d1.name name,u.id uid,u.name uname,u.departmentId udid from department d1 
+			join 
+				(SELECT id FROM department where id = #{id} or parentId = #{id} or shareMark = 1
+				union all
+				SELECT parentId FROM department where id = #{id}) d2
+			on d1.id = d2.id
+			left join 
+				user u
+			on u.departmentId = d1.id
+			where u.id != #{userId}
+		]]>
+	</select>
+	<resultMap id="departmentMap" type="com.meorient.phonecall.pojo.department.Department">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="label" />
+    <collection property="children" ofType="com.meorient.phonecall.pojo.user.User" > 
+        <id column="uid" jdbcType="BIGINT" property="id" />
+        <result column="uname" jdbcType="VARCHAR" property="label" />
+        <result column="udid" jdbcType="VARCHAR" property="departmentId" />
+    </collection>
+</resultMap>
+</mapper> 

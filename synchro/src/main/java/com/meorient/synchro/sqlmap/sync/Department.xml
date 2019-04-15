@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!--【department 】sql -->
+<mapper namespace="com.meorient.synchro.dao.sync.DepartmentDao">
+
+	<!-- ==============================基础操作======================================= -->
+	<!--根据条件得到列表 -->
+	<select id="selectMap" parameterType="com.meorient.synchro.pojo.sync.Department" resultType="com.meorient.synchro.pojo.sync.Department">
+		<![CDATA[ 
+			SELECT id,managerId,uid,managerName,name,parentId,shareMark
+			FROM department 
+		]]>
+	</select>
+
+	<!--根据id得到记录 -->
+	<select id="selectUnique" parameterType="com.meorient.synchro.pojo.sync.Department" resultType="com.meorient.synchro.pojo.sync.Department">
+		<![CDATA[ 
+			SELECT id,managerId,uid,managerName,name,parentId
+			FROM department where id = #{id}
+		]]>
+	</select>
+
+	<!-- 新增记录 -->
+	<insert id="insert" parameterType="com.meorient.synchro.pojo.sync.Department" 
+		useGeneratedKeys="true"	keyProperty="id" keyColumn="id">
+		<![CDATA[ 
+			INSERT INTO department (
+			    id,managerId,managerName,uid,name,parentId,shareMark
+			) VALUES (
+				#{id},#{managerId},#{managerName},#{uid},#{name},#{parentId},#{shareMark}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量新增记录 -->
+	<insert id="insertList" parameterType="com.meorient.synchro.pojo.sync.Department">
+		<![CDATA[ 
+			INSERT INTO department (
+			    id,managerId,managerName,uid,name,parentId
+			) VALUES (
+				#{id},#{managerId},#{managerName},#{uid},#{name},#{parentId},#{shareMark}
+			)
+		]]>
+	</insert>
+	
+	<!-- 修改记录 -->
+	<update id="update" parameterType="com.meorient.synchro.pojo.sync.Department">
+		<![CDATA[ UPDATE department]]>
+		<set>
+	 		<if test="managerId != null"><![CDATA[ managerId = #{managerId},]]></if>
+	 		<if test="managerName != null and managerName != ''"><![CDATA[ managerName = #{managerName},]]></if>
+	 		<if test="name != null and name != ''"><![CDATA[ name = #{name},]]></if>
+		</set>
+		 <![CDATA[ WHERE uid = #{uid} ]]>
+	</update>
+	
+	<!-- 删除记录 -->
+	<update id="delete" parameterType="com.meorient.synchro.pojo.sync.Department">
+		<![CDATA[ DELETE FROM department where id = #{id} ]]>
+	</update>
+	
+	<!-- 修正上属部门id为主键id -->
+	<update id="fixParentId" parameterType="com.meorient.synchro.pojo.sync.Department">
+		<![CDATA[ 
+			update department d1 left join department d2
+			on d1.parentId = -d2.uid set d1.parentId = d2.id
+			where d1.parentId < 0
+		]]>
+	</update>
+</mapper> 

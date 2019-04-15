@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!--【phonecall 】sql -->
+<mapper namespace="com.meorient.phonecall.dao.phonecall.PhoneCallDao">
+
+	<!-- ==============================基础操作======================================= -->
+	<!--根据条件得到列表 -->
+	<select id="selectList" parameterType="com.meorient.phonecall.pojo.phonecall.PhoneCall" resultType="com.meorient.phonecall.pojo.phonecall.PhoneCall">
+		<![CDATA[ 
+			SELECT id,sourceId,uId,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
+				callTime,connectTime,disconnectTime,callStatus,timestampdiff(second,connectTime,disconnectTime) connectSeconds
+			FROM phonecall 
+		]]>
+		<where>
+			<choose>
+				<when test="userId != null"> userId = #{userId} </when>
+				<otherwise>1=0</otherwise>
+			</choose>
+			<if test="callTime != null">
+				<![CDATA[ and callTime >= '${callTime}' and callTime <= date_add('${callTime}',interval 1 day) ]]>
+			</if>
+		</where>
+	</select>
+
+	<!--根据id得到记录 -->
+	<select id="selectUnique" parameterType="com.meorient.phonecall.pojo.phonecall.PhoneCall" resultType="com.meorient.phonecall.pojo.phonecall.PhoneCall">
+		<![CDATA[ 
+			SELECT id,sourceId,uId,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
+				callTime,connectTime,disconnectTime,callStatus
+			FROM phonecall where id = #{id}
+		]]>
+	</select>
+
+	<!-- 新增记录 -->
+	<insert id="insert" parameterType="com.meorient.phonecall.pojo.phonecall.PhoneCall" 
+		useGeneratedKeys="true"	keyProperty="id" keyColumn="id">
+		<![CDATA[ 
+			INSERT INTO phonecall (
+			    id,sourceId,uId,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
+				callTime,connectTime,disconnectTime,callStatus
+			) VALUES (
+				#{id},#{sourceId},#{uId},#{userId},#{recordText},#{recordUrl},#{fromTel},#{toTel},#{directType},#{extTel},
+				#{callTime},#{connectTime},#{disconnectTime},#{callStatus}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量新增记录 -->
+	<insert id="insertList" parameterType="com.meorient.phonecall.pojo.phonecall.PhoneCall">
+		<![CDATA[ 
+			INSERT INTO phonecall (
+			    id,sourceId,uId,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
+				callTime,connectTime,disconnectTime,callStatus
+			) VALUES (
+				#{id},#{sourceId},#{uId},#{userId},#{recordText},#{recordUrl},#{fromTel},#{toTel},#{directType},#{extTel},
+				#{callTime},#{connectTime},#{disconnectTime},#{callStatus}
+			)
+		]]>
+	</insert>
+	
+	<!-- 修改记录 -->
+	<update id="update" parameterType="com.meorient.phonecall.pojo.phonecall.PhoneCall">
+		<![CDATA[ UPDATE phonecall]]>
+		<set>
+	 		<if test="id != null"><![CDATA[ id = #{id},]]></if>
+	 		<if test="sourceId != null and sourceId != ''"><![CDATA[ sourceId = #{sourceId},]]></if>
+	 		<if test="uId != null and uId != ''"><![CDATA[ uId = #{uId},]]></if>
+	 		<if test="userId != null"><![CDATA[ userId = #{userId},]]></if>
+	 		<if test="fromTel != null and fromTel != ''"><![CDATA[ fromTel = #{fromTel},]]></if>
+	 		<if test="toTel != null and toTel != ''"><![CDATA[ toTel = #{toTel},]]></if>
+	 		<if test="directType != null"><![CDATA[ directType = #{directType},]]></if>
+	 		<if test="extTel != null and extTel != ''"><![CDATA[ extTel = #{extTel},]]></if>
+	 		<if test="callTime != null"><![CDATA[ callTime = #{callTime},]]></if>
+	 		<if test="connectTime != null"><![CDATA[ connectTime = #{connectTime},]]></if>
+	 		<if test="disconnectTime != null"><![CDATA[ disconnectTime = #{disconnectTime},]]></if>
+	 		<if test="callStatus != null"><![CDATA[ callStatus = #{callStatus},]]></if>
+		</set>
+		 <![CDATA[ WHERE id = #{id} ]]>
+	</update>
+	
+	<!-- 删除记录 -->
+	<update id="delete" parameterType="com.meorient.phonecall.pojo.phonecall.PhoneCall">
+		<![CDATA[ DELETE FROM phonecall where id = #{id} ]]>
+	</update>
+	
+	<!-- ==============================非基础操作======================================= -->
+	<!-- 查询用户被分享电话记录 -->
+	<select id="selectShareList" parameterType="com.meorient.phonecall.pojo.phonecall.PhoneCall" resultType="com.meorient.phonecall.pojo.phonecall.PhoneCall">
+		<![CDATA[ 
+			select p.id,p.sourceId,p.uId,p.userId,p.recordText,p.recordUrl,p.fromTel,p.toTel,
+			p.directType,p.extTel,p.callTime,p.connectTime,p.disconnectTime,p.callStatus,timestampdiff(second,connectTime,disconnectTime) connectSeconds
+			from phonecall p
+			right join 
+			(select phonecallId from phonecallshare where shareToId = #{userId}) ps
+			on p.id = ps.phonecallId 
+		]]>
+		<if test="callTime != null">
+			<![CDATA[ where p.callTime >= '${callTime}' and p.callTime <= date_add('${callTime}',interval 1 day) ]]>
+		</if>
+	</select>
+</mapper> 

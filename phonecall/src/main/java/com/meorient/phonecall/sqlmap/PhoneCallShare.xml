@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!--【phonecallshare 】sql -->
+<mapper namespace="com.meorient.phonecall.dao.phonecallshare.PhoneCallShareDao">
+
+	<!-- ==============================基础操作======================================= -->
+	<!--根据条件得到列表 -->
+	<select id="selectList" parameterType="com.meorient.phonecall.pojo.phonecallshare.PhoneCallShare" resultType="com.meorient.phonecall.pojo.phonecallshare.PhoneCallShare">
+		<![CDATA[ 
+			SELECT createTime,id,modTime,phoneCallId,shareFromId,shareFromName,shareToId,shareToName,
+				status
+			FROM phonecallshare 
+		]]>
+	</select>
+
+	<!--根据id得到记录 -->
+	<select id="selectUnique" parameterType="com.meorient.phonecall.pojo.phonecallshare.PhoneCallShare" resultType="com.meorient.phonecall.pojo.phonecallshare.PhoneCallShare">
+		<![CDATA[ 
+			SELECT createTime,id,modTime,phoneCallId,shareFromId,shareFromName,shareToId,shareToName,
+				status
+			FROM phonecallshare where id = #{id}
+		]]>
+	</select>
+
+	<!-- 新增记录 -->
+	<insert id="insert" parameterType="com.meorient.phonecall.pojo.phonecallshare.PhoneCallShare" 
+		useGeneratedKeys="true"	keyProperty="id" keyColumn="id">
+		<![CDATA[ 
+			INSERT INTO phonecallshare (
+			    createTime,id,modTime,phoneCallId,shareFromId,shareFromName,shareToId,shareToName,
+				status
+			) VALUES (
+				#{createTime},#{id},#{modTime},#{phoneCallId},#{shareFromId},#{shareFromName},#{shareToId},#{shareToName},
+				#{status}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量新增记录 -->
+	<insert id="insertList" parameterType="com.meorient.phonecall.pojo.phonecallshare.PhoneCallShare">
+		<![CDATA[ 
+			INSERT INTO phonecallshare (
+			    createTime,id,modTime,phoneCallId,shareFromId,shareFromName,shareToId,shareToName,
+				status
+			) VALUES (
+				#{createTime},#{id},#{modTime},#{phoneCallId},#{shareFromId},#{shareFromName},#{shareToId},#{shareToName},
+				#{status}
+			)
+		]]>
+	</insert>
+	
+	<!-- 修改记录 -->
+	<update id="update" parameterType="com.meorient.phonecall.pojo.phonecallshare.PhoneCallShare">
+		<![CDATA[ UPDATE phonecallshare]]>
+		<set>
+	 		<if test="createTime != null"><![CDATA[ createTime = #{createTime},]]></if>
+	 		<if test="id != null"><![CDATA[ id = #{id},]]></if>
+	 		<if test="modTime != null"><![CDATA[ modTime = #{modTime},]]></if>
+	 		<if test="phoneCallId != null"><![CDATA[ phoneCallId = #{phoneCallId},]]></if>
+	 		<if test="shareFromId != null"><![CDATA[ shareFromId = #{shareFromId},]]></if>
+	 		<if test="shareFromName != null and shareFromName != ''"><![CDATA[ shareFromName = #{shareFromName},]]></if>
+	 		<if test="shareToId != null"><![CDATA[ shareToId = #{shareToId},]]></if>
+	 		<if test="shareToName != null and shareToName != ''"><![CDATA[ shareToName = #{shareToName},]]></if>
+	 		<if test="status != null"><![CDATA[ status = #{status},]]></if>
+		</set>
+		 <![CDATA[ WHERE id = #{id} ]]>
+	</update>
+	
+	<!-- 删除记录 -->
+	<update id="delete" parameterType="com.meorient.phonecall.pojo.phonecallshare.PhoneCallShare">
+		<![CDATA[ DELETE FROM phonecallshare where id = #{id} ]]>
+	</update>
+</mapper> 

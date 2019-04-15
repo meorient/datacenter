@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!--【company 公司】sql -->
+<mapper namespace="com.meorient.phonecall.dao.company.CompanyDao">
+
+	<!-- ==============================基础操作======================================= -->
+	<!--根据条件得到列表 -->
+	<select id="selectList" parameterType="com.meorient.phonecall.pojo.company.Company" resultType="com.meorient.phonecall.pojo.company.Company">
+		<![CDATA[ 
+			SELECT email,id,name,phone
+			FROM company 
+		]]>
+	</select>
+
+	<!--根据id得到记录 -->
+	<select id="selectUnique" parameterType="com.meorient.phonecall.pojo.company.Company" resultType="com.meorient.phonecall.pojo.company.Company">
+		<![CDATA[ 
+			SELECT email,id,name,phone
+			FROM company where id = #{id}
+		]]>
+	</select>
+
+	<!-- 新增记录 -->
+	<insert id="insert" parameterType="com.meorient.phonecall.pojo.company.Company" 
+		useGeneratedKeys="true"	keyProperty="id" keyColumn="id">
+		<![CDATA[ 
+			INSERT INTO company (
+			    email,id,name,phone
+			) VALUES (
+				#{email},#{id},#{name},#{phone}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量新增记录 -->
+	<insert id="insertList" parameterType="com.meorient.phonecall.pojo.company.Company">
+		<![CDATA[ 
+			INSERT INTO company (
+			    email,id,name,phone
+			) VALUES (
+				#{email},#{id},#{name},#{phone}
+			)
+		]]>
+	</insert>
+	
+	<!-- 修改记录 -->
+	<update id="update" parameterType="com.meorient.phonecall.pojo.company.Company">
+		<![CDATA[ UPDATE company]]>
+		<set>
+	 		<if test="email != null and email != ''"><![CDATA[ email = #{email},]]></if>
+	 		<if test="id != null"><![CDATA[ id = #{id},]]></if>
+	 		<if test="name != null and name != ''"><![CDATA[ name = #{name},]]></if>
+	 		<if test="phone != null and phone != ''"><![CDATA[ phone = #{phone},]]></if>
+		</set>
+		 <![CDATA[ WHERE id = #{id} ]]>
+	</update>
+	
+	<!-- 删除记录 -->
+	<update id="delete" parameterType="com.meorient.phonecall.pojo.company.Company">
+		<![CDATA[ DELETE FROM company where id = #{id} ]]>
+	</update>
+</mapper> 
