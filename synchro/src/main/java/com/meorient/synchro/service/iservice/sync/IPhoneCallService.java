@@ -1,5 +1,7 @@
 package com.meorient.synchro.service.iservice.sync;
 
+import java.sql.Timestamp;
+
 import com.meorient.common.service.iservice.IBaseService;
 import com.meorient.synchro.pojo.dynamics.DyPhoneCall;
 import com.meorient.synchro.pojo.sync.PhoneCall;
@@ -16,7 +18,7 @@ public interface IPhoneCallService extends IBaseService<PhoneCall>{
 	 * @param pc
 	 * @param dypc
 	 */
-	public int dyAddSync(DyPhoneCall dypc);
+	public int dyAddSync(DyPhoneCall dypc , Timestamp now);
 	
 	/**
 	 * 修正userId为系统内主键id

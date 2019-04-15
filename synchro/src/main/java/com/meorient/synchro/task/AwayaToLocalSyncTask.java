@@ -14,7 +14,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.meorient.synchro.pojo.dynamics.DyPhoneCall;
 import com.meorient.synchro.pojo.ns.NSDepartment;
@@ -35,7 +36,8 @@ import com.meorient.synchro.service.iservice.sync.IUserService;
  * @作者:chuxu
  * @日期:2019年3月19日下午2:58:05
  */
-@Component
+@RestController
+@RequestMapping("/task")
 public class AwayaToLocalSyncTask {
 	
 	@Autowired
@@ -59,6 +61,9 @@ public class AwayaToLocalSyncTask {
 	/** 日志对象 */
 	protected Logger logger = LogManager.getLogger(this.getClass());
 	
+	/** 调用标识：两次定时任务之间只能手动调用一次 */
+	private boolean phonecallSync = false;
+	
 	/**
 	 * 数据同步
 	 * 每天同步NS的部门
@@ -66,6 +71,7 @@ public class AwayaToLocalSyncTask {
 	 * @throws SQLException 
 	 */
 	@Scheduled(cron = "0 0 2 * * ?")
+	@RequestMapping("/departments")
 	public void task() throws IOException, SQLException {
 		int mod = 0;
 		int add = 0;
@@ -108,6 +114,7 @@ public class AwayaToLocalSyncTask {
 	 * @throws SQLException 
 	 */
 	@Scheduled(cron = "0 10 2 * * ?")
+	@RequestMapping("/users")
 	public void task2() throws IOException, SQLException {
 		int mod = 0;
 		int add = 0;
@@ -139,7 +146,7 @@ public class AwayaToLocalSyncTask {
 		}
 		// 修正上属部门id
 		userService.nsFixSync(user);
-		logger.info("NS部门同步任务同步完成，新增数量：" + add + "，修改数量" + mod);
+		logger.info("NS用户同步任务同步完成，新增数量：" + add + "，修改数量" + mod);
 		// 注：删除业务暂未考虑
 	}
 	
@@ -151,6 +158,7 @@ public class AwayaToLocalSyncTask {
 	public void phoneCallSync() {
 		int rowNum = 0;
 		int rowSize = 5000;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
 		// 电话记录同步，数据量较大，分页同步
 		List<PhoneCall> locallist = phoneCallService.selectList(new PhoneCall());
 		DyPhoneCall dypc = new DyPhoneCall();
@@ -170,7 +178,7 @@ public class AwayaToLocalSyncTask {
 		dypc.setRowNum(rowNum);
 		dypc.setRowSize(rowSize);
 		
-		// 遍历所有dynamics数据S
+		// 遍历所有dynamics数据
 		Iterator<DyPhoneCall> it = null;
 		DyPhoneCall dyPhoneCall = null;
 		List<DyPhoneCall> dylist = null;
@@ -179,13 +187,27 @@ public class AwayaToLocalSyncTask {
 			it = dylist.iterator();
 			while(it.hasNext()) {
 				dyPhoneCall = it.next();
-				phoneCallService.dyAddSync(dyPhoneCall);
+				phoneCallService.dyAddSync(dyPhoneCall,now);
 			}
 			rowNum += dylist.size();
 			dypc.setRowNum(rowNum);
 		}while(dylist.size() == rowSize);
 		// 数据修正，关联用户id，重名处理
 		phoneCallService.dyFixSync(new PhoneCall());
+		phonecallSync = false;
 		logger.info("dynamics电话记录同步完成，新增数量：" + rowNum );
+	}
+	
+	/**
+	 * 手动调用电话记录同步
+	 */
+	@RequestMapping("/phonecalls")
+	public void callPhoneCallSync() {
+		if( phonecallSync == true ) {
+			logger.info("可调用次数达到上限");
+			return;
+		}
+		phoneCallSync();
+		phonecallSync = true;
 	}
 }

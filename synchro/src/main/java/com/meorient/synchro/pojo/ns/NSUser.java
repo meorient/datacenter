@@ -19,6 +19,8 @@ public class NSUser extends BasePojo {
 	private String email;
 	/** 部门id */
 	private Long department_id;
+	/** 活动状态（离职） */
+	private String isInActive;
 
 	/**
 	 * @取得 name
@@ -74,5 +76,19 @@ public class NSUser extends BasePojo {
 	 */
 	public void setDepartment_id(Long department_id) {
 		this.department_id = department_id;
+	}
+
+	/**
+	 * @取得 isInActive
+	 */
+	public String getIsInActive() {
+		return isInActive;
+	}
+
+	/**
+	 * @设置 isInActive
+	 */
+	public void setIsInActive(String isInActive) {
+		this.isInActive = isInActive;
 	}
 }

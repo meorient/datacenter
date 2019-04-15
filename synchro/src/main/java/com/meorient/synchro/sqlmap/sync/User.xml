@@ -53,13 +53,11 @@
 	<update id="update" parameterType="com.meorient.synchro.pojo.sync.User">
 		<![CDATA[ UPDATE user]]>
 		<set>
-	 		<![CDATA[ wechatUserId = #{wechatUserId},]]>
+	 		<if test="name != null and name != ''">name = #{name},</if>
+	 		<if test="email != null and email != ''">email = #{email},</if>
+	 		<if test="isResigned != null">isResigned = #{isResigned},</if>
 		</set>
-		where
-		<choose>
-			<when test="email != null"> email = #{email} </when>
-			<otherwise>1=0</otherwise>
-		</choose>
+		where uid = #{uid}
 	</update>
 	
 	<!-- 删除记录 -->

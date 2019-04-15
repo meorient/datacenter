@@ -10,8 +10,12 @@
 		<![CDATA[ 
 			SELECT id,sourceId,uId,userId,recordText,recordUrl,fromTel,toTel,directType,extTel,
 				callTime,connectTime,disconnectTime,callStatus,timestampdiff(second,connectTime,disconnectTime) connectSeconds
-			FROM phonecall 
+			FROM phonecall
 		]]>
+		<choose>
+			<when test="userId != null"> where userId = #{userId} </when>
+			<otherwise> limit 2000 </otherwise>
+		</choose>
 	</select>
 
 	<!--根据id得到记录 -->

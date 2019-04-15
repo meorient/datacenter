@@ -42,8 +42,9 @@ public class UserService extends BaseService<User, UserDao> implements IUserServ
 			user.setCreateTime(now);
 			user.setDepartmentId(nsUser.getDepartment_id()==null?null:-nsUser.getDepartment_id());// 负数表示未修正，非本项目上属关系
 			user.setUid(nsUser.getEmployee_id().toString());
-			user.setEmail(nsUser.getEmail());
+			user.setIsResigned(("Yes".equals(nsUser.getIsInActive())?1:0));
 			result = this.dao.insert(user);
+			user.setEmail(nsUser.getEmail());
 			synchroLogService.insertUser("Netsuite_add", user, result);
 		} catch (Exception e) {
 			logger.error("用户增量单条同步异常，源数据信息："+ JsonTool.getString(nsUser) , e);
@@ -64,6 +65,7 @@ public class UserService extends BaseService<User, UserDao> implements IUserServ
 			user.setName(nsUser.getName());
 			user.setUid(nsUser.getEmployee_id().toString());
 			user.setEmail(nsUser.getEmail());
+			user.setIsResigned(("Yes".equals(nsUser.getIsInActive())?1:0));
 			user.setCreateTime(now);
 			result =  this.dao.update(user);
 			synchroLogService.insertUser("Netsuite_update", user, result);
@@ -98,6 +100,10 @@ public class UserService extends BaseService<User, UserDao> implements IUserServ
 				return true;
 			}
 			if(!nsuser.getEmail().trim().equals(user.getEmail())) {
+				return true;
+			}
+			if(("No".equals(nsuser.getIsInActive()) && user.getIsResigned()==1)
+					|| "Yes".equals(nsuser.getIsInActive()) && user.getIsResigned()==0) {
 				return true;
 			}
 		}catch(Exception e) {

@@ -1,6 +1,8 @@
 
 package com.meorient.synchro.service.sync;
 
+import java.sql.Timestamp;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +31,10 @@ public class PhoneCallService extends BaseService<PhoneCall,PhoneCallDao> implem
 	 * @param dypc
 	 */
 	@Override
-	public int dyAddSync(DyPhoneCall dypc) {
+	public int dyAddSync(DyPhoneCall dypc , Timestamp now) {
 		int result = -1;
 		try {
-		PhoneCall pc = new PhoneCall();
+			PhoneCall pc = new PhoneCall();
 			pc.setRecordText(dypc.getDescription());
 			pc.setCallTime(dypc.getNew_begintime());
 			pc.setConnectTime(dypc.getNew_connectTime());
@@ -41,6 +43,7 @@ public class PhoneCallService extends BaseService<PhoneCall,PhoneCallDao> implem
 			pc.setFromTel(dypc.getNew_fromnum());
 			pc.setToTel(dypc.getNew_tonum());
 			pc.setUserName(dypc.getOwnerIdName());
+			pc.setCreateTime(now);
 			result = this.dao.insert(pc);
 			synchroLogService.insertPhoneCall("dynamics_add", pc, result);
 		} catch (Exception e) {

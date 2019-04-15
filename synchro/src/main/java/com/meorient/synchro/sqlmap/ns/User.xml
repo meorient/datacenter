@@ -8,7 +8,7 @@
 	<!--根据条件得到列表 -->
 	<select id="selectList" parameterType="com.meorient.synchro.pojo.ns.NSUser" resultType="com.meorient.synchro.pojo.ns.NSUser">
 		<![CDATA[ 
-			select DEPARTMENT_ID , EMPLOYEE_ID , NAME , EMAIL from EMPLOYEES
+			select DEPARTMENT_ID , EMPLOYEE_ID , NAME , EMAIL , ISINACTIVE from EMPLOYEES
 		]]>
 	</select>
 </mapper> 
