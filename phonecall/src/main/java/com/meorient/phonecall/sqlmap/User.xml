@@ -14,7 +14,7 @@
 		]]>
 		<where>
 			<choose>
-				<when test="departmentId != null">departmentId = #{departmentId}</when>
+				<when test="departmentId != null">departmentId = #{departmentId} and isResigned = 0</when>
 				<otherwise>1=0</otherwise>
 			</choose>
 		</where>
