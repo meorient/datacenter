@@ -32,7 +32,7 @@ import freemarker.template.Template;
  * @日期:2019年3月19日上午9:45:43
  */
 public abstract class AbsCodeMakerService {
-	//日志
+	/** 日志 */
 	protected Logger logger = LogManager.getLogger(this.getClass());
 	
 	public static Map<String, String> dataTypeConverCfg = new HashMap<String, String>();
@@ -65,7 +65,7 @@ public abstract class AbsCodeMakerService {
 		}
 		File projectDir = getDataMap(dataMap, cfg, columnList);
 
-		// 取得模板目录、项目根目录
+		/** 取得模板目录、项目根目录 */
 		String templateBasePath = CodeMakerCfg.class.getClass().getResource(cfg.getTemplateBasePath()).getFile();
 		templateBasePath = tidyFileUrl(templateBasePath, null);
 		File templateBaseDir = new File(templateBasePath);

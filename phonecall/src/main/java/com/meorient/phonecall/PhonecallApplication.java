@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.format.FormatterRegistry;
@@ -23,9 +24,11 @@ import com.meorient.common.converter.TimestampConvert;
 import com.meorient.common.util.JsonTool;
 import com.meorient.phonecall.configuration.CheckOptInterceptor;
 
+
 @SpringBootApplication
 @EnableScheduling
 @ServletComponentScan
+@EnableDiscoveryClient
 @ComponentScan(basePackages = { "com.meorient" })
 public class PhonecallApplication extends WebMvcConfigurerAdapter{
 	/** 访问限制拦截器 */
