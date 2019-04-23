@@ -8,7 +8,7 @@ common:
         url: 10.20.11.254
         port: 1433
         userName: sa
-        password: "p@ssw0rd"
+        password: p@ssw0rd
         database: DC
     netsuite:
         url: odbcserver.na2.netsuite.com

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--【phonecallshare 】sql -->
+<mapper namespace="com.meorient.dao.UserDao">
+
+    <!-- ==============================基础操作======================================= -->
+    <select id="selectList" parameterType="com.meorient.pojo.User" resultType="com.meorient.pojo.User">
+        <![CDATA[
+			SELECT uId,companyId,departmentId,email,id,isResigned,mobile,name,parentId,
+				wechatUserId,password
+			FROM user
+		]]>
+        <where>
+            <choose>
+                <when test="departmentId != null">departmentId = #{departmentId} and isResigned = 0</when>
+                <otherwise>1=0</otherwise>
+            </choose>
+        </where>
+    </select>
+
+
+    <select id="selectUnique" parameterType="com.meorient.pojo.User" resultType="com.meorient.pojo.User">
+        <![CDATA[
+			SELECT companyId,departmentId,email,id,isResigned,mobile,name,parentId,
+				wechatUserId
+			FROM user
+		]]>
+        <where>
+            <choose>
+                <when test="wechatUserId != null">wechatUserId = #{wechatUserId} and departmentId is not null</when>
+                <when test="name != null and name != ''">name = #{name}</when>
+                <when test="mobile != null and mobile != ''">mobile = #{mobile}</when>
+                <otherwise>1=0</otherwise>
+            </choose>
+        </where>
+    </select>
+
+
+    <!-- 新增记录 -->
+    <insert id="insert" parameterType="com.meorient.pojo.User"
+            useGeneratedKeys="true"	keyProperty="id" keyColumn="id">
+		<![CDATA[
+			INSERT INTO user (
+			    companyId,departmentId,email,id,isResigned,mobile,name,parentId,
+				wechatUserId
+			) VALUES (
+				#{companyId},#{departmentId},#{email},#{id},#{isResigned},#{mobile},#{name},#{parentId},
+				#{wechatUserId}
+			)
+		]]>
+	</insert>
+
+    <!-- 批量新增记录 -->
+    <insert id="insertList" parameterType="com.meorient.pojo.User">
+		<![CDATA[
+			INSERT INTO user (
+			    companyId,departmentId,email,id,isResigned,mobile,name,parentId,
+				wechatUserId
+			) VALUES (
+				#{companyId},#{departmentId},#{email},#{id},#{isResigned},#{mobile},#{name},#{parentId},
+				#{wechatUserId}
+			)
+		]]>
+	</insert>
+
+    <!-- 修改记录 -->
+    <update id="update" parameterType="com.meorient.pojo.User">
+        <![CDATA[ UPDATE user]]>
+        <set>
+            <![CDATA[ wechatUserId = #{wechatUserId},]]>
+        </set>
+        where
+        <choose>
+            <when test="email != null"> email = #{email} </when>
+            <otherwise>1=0</otherwise>
+        </choose>
+    </update>
+</mapper>

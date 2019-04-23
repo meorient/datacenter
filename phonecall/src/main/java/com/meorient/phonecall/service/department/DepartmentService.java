@@ -20,7 +20,7 @@ import com.meorient.phonecall.service.iservice.IDepartmentService;
 @Service
 public class DepartmentService extends BaseService<Department, DepartmentDao> implements IDepartmentService {
   	/**
-	 * 查询分享范围内用户
+			* 查询分享范围内用户
 	 * @param department
 	 */
 	@Override
