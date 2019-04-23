@@ -41,10 +41,16 @@ public abstract class SynchroCodeMaker {
 	 * @throws Exception
 	 */
 	public void generateCode(GenerateParam param, SqlSessionTemplate sqlSessionTemplate) throws Exception {
-		// 取得表信息
-		ColumnInfo queryParam = new ColumnInfo();
-		queryParam.setDb(param.getDbSourceName());
-		queryParam.setTableName(param.getDbSourceName());
+		// 取得两表信息
+		// 取得模板目录
+		// 生成模板
+		ColumnInfo sourceColumnInfo = new ColumnInfo();
+		sourceColumnInfo.setDb(param.getDbSourceName());
+		sourceColumnInfo.setTableName(param.getTableSourceName());
+		
+		ColumnInfo targetColumnInfo = new ColumnInfo();
+		targetColumnInfo.setDb(param.getDbSourceName());
+		targetColumnInfo.setTableName(param.getTableSourceName());
 
 		SynCodeMakerDao dao = new SynCodeMakerDao();
 		List<ColumnInfo> columnList = dao.selectList(queryParam);
@@ -53,21 +59,21 @@ public abstract class SynchroCodeMaker {
 			return;
 		}
 
-		/** 生成参数信息,取得模板目录、项目根目录 */
-		File projectDir = getDataMap(param, columnList);
-
-		/** 取得模板目录、项目根目录 */
-		String templateBasePath = CodeMakerCfg.class.getClass().getResource(cfg.getTemplateBasePath()).getFile();
-		templateBasePath = tidyFileUrl(templateBasePath, null);
-		File templateBaseDir = new File(templateBasePath);
-		Set<String> templateNames = new HashSet<String>();
-		getTemplatesByBaseDir(templateBaseDir, templateNames, templateBaseDir);// 找到目录下的所有模板
-
-		/** 生成模板 */
-		boolean isOk = makerCode(templateBaseDir, templateNames, cfg, projectDir, dataMap);
-		if (isOk) {
-			logger.info("文件生成成功");
-		}
+//		/** 生成参数信息,取得模板目录、项目根目录 */
+////		File projectDir = getDataMap(param, columnList);
+//
+//		/** 取得模板目录、项目根目录 */
+//		String templateBasePath = GenerateParam.class.getClass().getResource(param.getTemplateBasePath()).getFile();
+//		templateBasePath = tidyFileUrl(templateBasePath, null);
+//		File templateBaseDir = new File(templateBasePath);
+//		Set<String> templateNames = new HashSet<String>();
+//		getTemplatesByBaseDir(templateBaseDir, templateNames, templateBaseDir);// 找到目录下的所有模板
+//
+//		/** 生成模板 */
+//		boolean isOk = makerCode(templateBaseDir, templateNames, cfg, projectDir, dataMap);
+//		if (isOk) {
+//			logger.info("文件生成成功");
+//		}
 	}
 
 	/**
@@ -81,8 +87,7 @@ public abstract class SynchroCodeMaker {
 	 * @return
 	 * @throws Exception
 	 */
-	private boolean makerCode(File templateBaseDir, Set<String> templateNames, CodeMakerCfg cfg, File projectDir,
-			Map<String, Object> dataMap) throws Exception {
+	private boolean makerCode(File templateBaseDir, Set<String> templateNames, GenerateParam param, File projectDir) throws Exception {
 		// 初始化模板
 		Configuration markerCfg = new Configuration(Configuration.VERSION_2_3_25);
 		markerCfg.setDirectoryForTemplateLoading(templateBaseDir);
@@ -93,8 +98,8 @@ public abstract class SynchroCodeMaker {
 		Template template = null;
 		for (String tpName : templateNames) {
 			boolean isSkip = false;
-			for (String notGenerate : cfg.getNotGenerateTemplates()) {
-				if (tpName.indexOf(notGenerate) > 0) {
+			for (ECodeMakerTemplate notGenerate : param.getUngenerateTemplate()) {
+				if (tpName.indexOf(notGenerate.getName()) > 0) {
 					logger.info("不产生指定的模板：{}", tpName);
 					isSkip = true;
 					break;

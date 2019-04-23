@@ -2,6 +2,7 @@
 package com.meorient.common.syncodemaker;
 
 import org.mybatis.spring.SqlSessionTemplate;
+
 import com.meorient.common.dao.AbsBaseDao;
 
 /**

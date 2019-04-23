@@ -17,4 +17,11 @@ public enum ECodeMakerTemplate {
 	ECodeMakerTemplate(String name) {
 		this.name = name;
 	}
+
+	/**
+	 * @取得 name
+	 */
+	public String getName() {
+		return name;
+	}
 }

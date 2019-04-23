@@ -2,13 +2,15 @@ package com.meorient.common.syncodemaker;
 
 import java.util.Map;
 
+import com.meorient.common.pojo.BasePojo;
+
 /**
  * @功能: 生成模板所需要的动态参数
  * @项目名:common
  * @作者:chuxu
  * @日期:2019年4月22日下午4:41:31
  */
-public class GenerateParam {
+public class GenerateParam extends BasePojo {
 	/** 作者 */
 	private String authorName;
 
@@ -29,6 +31,12 @@ public class GenerateParam {
 
 	/** 同步目标 */
 	private String dbTargetName;
+
+	/** 同步表 */
+	private String tableSourceName;
+
+	/** 目标表 */
+	private String tableTargetName;
 
 	/** 字段映射 */
 	private Map<String, String> fieldRelationMap;
@@ -75,6 +83,34 @@ public class GenerateParam {
 	 */
 	public String getPackageAName() {
 		return packageAName;
+	}
+
+	/**
+	 * @取得 tableSourceName
+	 */
+	public String getTableSourceName() {
+		return tableSourceName;
+	}
+
+	/**
+	 * @设置 tableSourceName
+	 */
+	public void setTableSourceName(String tableSourceName) {
+		this.tableSourceName = tableSourceName;
+	}
+
+	/**
+	 * @取得 tableTargetName
+	 */
+	public String getTableTargetName() {
+		return tableTargetName;
+	}
+
+	/**
+	 * @设置 tableTargetName
+	 */
+	public void setTableTargetName(String tableTargetName) {
+		this.tableTargetName = tableTargetName;
 	}
 
 	/**
