@@ -1,11 +1,15 @@
 /** */
 package com.meorient.phonecall.service.user;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.meorient.common.util.HttpClientTool;
+import com.meorient.common.util.JsonTool;
 import com.meorient.common.util.StringTool;
 import com.meorient.phonecall.configuration.SessionManager;
 import com.meorient.phonecall.dao.user.UserDao;
@@ -14,6 +18,8 @@ import com.meorient.phonecall.pojo.wechat.Wechat;
 import com.meorient.phonecall.service.base.BaseService;
 import com.meorient.phonecall.service.iservice.IUserService;
 import com.meorient.phonecall.service.iservice.IWechatService;
+import com.meorient.phonecall.service.temp.temp;
+import com.meorient.phonecall.service.temp.temp2;
 
 /**
  * @功能:【用户】Service

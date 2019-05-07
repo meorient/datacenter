@@ -53,8 +53,11 @@ public abstract class SynchroCodeMaker {
 		targetColumnInfo.setTableName(param.getTableSourceName());
 
 		SynCodeMakerDao dao = new SynCodeMakerDao();
-		List<ColumnInfo> columnList = dao.selectList(queryParam);
-		if (columnList.isEmpty()) {
+		
+		List<ColumnInfo> sourceColList = dao.selectList(sourceColumnInfo);
+		List<ColumnInfo> targetColList = dao.selectList(targetColumnInfo);
+		
+		if (sourceColList.isEmpty() || targetColList.isEmpty()) {
 			logger.info("没有找到数据库表信息");
 			return;
 		}

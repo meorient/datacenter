@@ -93,6 +93,7 @@ public class PhoneCallController {
             	fileName = res.getString("FileName");                                                                                                                                  ;
             }
         } catch (Exception e) {
+        	logger.error(e);
             e.printStackTrace();
         }finally{
             try {

@@ -1,6 +1,20 @@
 package com.meorient.common.syncodemaker;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+
+import java.util.Set;
 
 /**
  * @功能:
@@ -9,6 +23,8 @@ import java.util.List;
  * @日期:2019年4月23日上午9:17:56
  */
 public class SyncTemplateGenerater extends SimpleCodeTemplateGenerater implements CodeTemplateGenerater{
+	
+	protected Logger logger = LogManager.getLogger(this.getClass());
 	
 	private List<ColumnInfo> sourceColumns;
 	
@@ -54,9 +70,6 @@ public class SyncTemplateGenerater extends SimpleCodeTemplateGenerater implement
 	 */
 	@Override
 	public void generate(GenerateParam param) {
-			/** 生成参数信息,取得模板目录、项目根目录 */
-//		File projectDir = getDataMap(param, columnList);
-	
 		/** 取得模板目录、项目根目录 */
 		String templateBasePath = GenerateParam.class.getClass().getResource(param.getTemplateBasePath()).getFile();
 		templateBasePath = tidyFileUrl(templateBasePath, null);
@@ -68,6 +81,88 @@ public class SyncTemplateGenerater extends SimpleCodeTemplateGenerater implement
 		boolean isOk = makerCode(templateBaseDir, templateNames, cfg, projectDir, dataMap);
 		if (isOk) {
 			logger.info("文件生成成功");
+		}
+		
+		
+		// 初始化模板
+		Configuration markerCfg = new Configuration(Configuration.VERSION_2_3_25);
+		markerCfg.setDirectoryForTemplateLoading(templateBaseDir);
+
+		// 生成代码
+		String classFileName = null;
+		File classFile = null;
+		Template template = null;
+		for (String tpName : templateNames) {
+
+			classFileName = tidyFileUrl(tpName, dataMap);
+			classFile = new File(projectDir, classFileName);
+			if (classFile.exists()) {
+				logger.info("文件已存在，跳过生成：{}", classFile.getPath());
+				continue;
+			} else {
+				File fileParent = classFile.getParentFile();
+				if (!fileParent.exists()) {
+					fileParent.mkdirs();
+				}
+			}
+//
+//			FileOutputStream fos = new FileOutputStream(classFile);
+//			OutputStreamWriter streamWriter = new OutputStreamWriter(fos, cfg.getFileEncoding());
+//			try {
+//				template = markerCfg.getTemplate(tpName);
+//				template.process(dataMap, streamWriter);
+//				streamWriter.flush();
+//			} catch (Exception ex) {
+//				classFile.delete();
+//				logger.info("文件生成失败", ex);
+//				return false;
+//			} finally {
+//				streamWriter.close();
+//				fos.close();
+//			}
+//		}
+//		return true;
+//	}
+	}
+	
+	/**
+	 * 整理url，将url中参数替换，并将“\”替换成“/”
+	 * 
+	 * @param url
+	 * @param dataMap 可以为空
+	 * @return
+	 */
+	private String tidyFileUrl(String url, GenerateParam param) {
+		// templateBasePath=/E:/1_myProject/5_git/zfLendingPlatform/dunningCommon/target/classes/codemakertemplate
+		if (url.startsWith("/") && url.indexOf(":") > 0) {
+			url = url.substring(1);// 替换盘符前的“/”
+		}
+		if (param != null) {
+			for (Entry<String, Object> entry : param.entrySet()) {
+				url = url.replaceAll("\\{" + entry.getKey() + "\\}", entry.getValue().toString());
+			}
+			url = url.replaceAll("\\.ftl", "");
+		}
+		url = url.replaceAll("\\\\", "/");
+		url = url.replaceAll("//", "/");
+		return url;
+	}
+	
+	/**
+	 * 找到baseDir目录下的所有模板
+	 * 
+	 * @param baseDir
+	 * @param templateNames
+	 * @param currDir
+	 */
+	private void getTemplatesByBaseDir(File baseDir, Set<String> templateNames, File currDir) {
+		if (currDir.isDirectory()) {
+			for (File tempDir : currDir.listFiles()) {
+				getTemplatesByBaseDir(baseDir, templateNames, tempDir);
+			}
+		} else {
+			String tpName = currDir.getPath().substring(baseDir.getPath().length());
+			templateNames.add(tidyFileUrl(tpName, null));
 		}
 	}
 }

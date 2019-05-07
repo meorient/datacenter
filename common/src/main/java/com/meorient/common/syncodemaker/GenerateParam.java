@@ -231,4 +231,45 @@ public class GenerateParam extends BasePojo {
 	public void setUngenerateTemplate(ECodeMakerTemplate[] ungenerateTemplate) {
 		this.ungenerateTemplate = ungenerateTemplate;
 	}
+	
+	public Map<String,String> getRepalce(){
+		Map<String,String> replace = new HashMap<String,String>();
+		replace.put("authorName", value)
+		replace.put("projectName", value)
+		replace.put("packageAName", value)
+		replace.put("packageBName", value)
+		replace.put("packageCName", value)
+		replace.put("dbSourceName", value)
+		replace.put("dbTargetName", value)
+		replace.put("tableSourceName", value)
+		replace.put("tableTargetName", value)
+		replace.put("authorName", value)
+		
+		/** 作者 */
+		private String authorName;
+
+		/** 项目名称 */
+		private String projectName;
+
+		/** 项目一级包名 */
+		private String packageAName;
+
+		/** 项目二级包名 */
+		private String packageBName;
+
+		/** 项目三级包名 */
+		private String packageCName;
+
+		/** 同步来源 */
+		private String dbSourceName;
+
+		/** 同步目标 */
+		private String dbTargetName;
+
+		/** 同步表 */
+		private String tableSourceName;
+
+		/** 目标表 */
+		private String tableTargetName;
+	}
 }
