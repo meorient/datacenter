@@ -1,0 +1,26 @@
+spring:
+    profiles:
+        # 指定运行环境
+#        java -jar project-name.jar --spring.profiles.active=pro
+        active: default
+#    logging:
+#        config: src/main/resources/log4j2.xml
+    application:
+        name: geometry
+    datasource: 
+        url: jdbc:h2:file:~/test #//配置h2数据库连接地址 
+        driverClassName: org.h2.Driver #//配置JDBC Driver
+        username: sa #配置数据库用户名
+        password: #配置数据库密码
+        platform: h2
+
+# Tomcat配置
+server:
+    servlet: 
+        context-path: /
+    port: 50680
+    
+# mybatis配置(下划线到驼峰的自动转换)
+mybatis: 
+    configuration: 
+        map-underscore-to-camel-case: true
