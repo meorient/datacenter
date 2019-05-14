@@ -5,8 +5,16 @@ package com.meorient.geometry
  * @author chuxu
  */
 class Customer {
+	def extId
 	def name
 	def address
 	def latitude
 	def longitude
-	def distance}
+	def userExtId
+	def userName
+	def distance
+	def level
+	def confidence
+	def comprehension
+	def precise
+}

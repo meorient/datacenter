@@ -19,8 +19,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.codehaus.groovy:groovy'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1'
+	compile 'org.springframework.boot:spring-boot-starter-data-mongodb:2.1.4.RELEASE'
 	compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '3.0.0-alpha-4'
 	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile 'com.alibaba:fastjson:1.2.58'
 	
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
