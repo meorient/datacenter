@@ -40,23 +40,23 @@ class GeometryApplication {
 	 * @return
 	 */
 	@RequestMapping(value="/v1/customers/location/api",method = RequestMethod.GET)
-	String nearby(longitude,latitude,distance) {
-		// 模拟
-		longitude = 120.0
-		latitude = 30.0
-		distance = 50000
+	String nearby(Double longitude,Double latitude,Integer distance) {
+		// 默认米奥50000米
+		if(longitude == null) longitude = 120.371243
+		if(latitude == null) latitude = 30.30317
+		if(distance == null) distance = 50000
 		// 分别通过mysql，mongo，redis，h2进行地理查询
 
 		// 通过h2实现地理位置查询
-		def mapper = applicationContext.getBean(H2Mapper.class)
-		JsonOutput output = new JsonOutput()
+//		def mapper = applicationContext.getBean(H2Mapper.class)
+//		JsonOutput output = new JsonOutput()
 		
 		// 通过mongodb实现地理附近查询
 		def point = [longitude,latitude]
 		BasicDBObject obj = new BasicDBObject("location",new BasicDBObject('$nearSphere',new BasicDBObject('$geometry',
 				new BasicDBObject("type","Point").append('coordinates', point)).append('$maxDistance', distance)))
 		Query query = new BasicQuery(String.valueOf(obj))
-		def list = mongoTemplate.find(query, Customer,"geometry")
+		def list = mongoTemplate.find(query, Customer,"test")
         'mongo方式 ---------->' + JSON.toJSONString(list.size())
 		// 通过redis实现地理附近查询
 		

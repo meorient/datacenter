@@ -7,16 +7,15 @@ spring:
 #        config: src/main/resources/log4j2.xml
     application:
         name: geometry
-    datasource: 
-        url: jdbc:h2:file:~/test #//配置h2数据库连接地址 
-        driverClassName: org.h2.Driver #//配置JDBC Driver
-        username: sa #配置数据库用户名
-        password: #配置数据库密码
-        platform: h2
+#    datasource: 
+#        url: jdbc:h2:file:~/test #//配置h2数据库连接地址 
+#        driverClassName: org.h2.Driver #//配置JDBC Driver
+#        username: sa #配置数据库用户名
+#        password: #配置数据库密码
+#        platform: h2
     data:
         mongodb:
-            #uri: mongodb://192.168.99.100:27017/test
-            uri: mongodb://127.0.0.1:27017/geometry
+            uri: mongodb://127.0.0.1:27017/test
 
 # Tomcat配置
 server:
