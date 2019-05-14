@@ -50,14 +50,13 @@ class GeometryApplication {
 		// 通过h2实现地理位置查询
 		def mapper = applicationContext.getBean(H2Mapper.class)
 		JsonOutput output = new JsonOutput()
-		print output.toJson(mapper.find(1L))
 		
 		// 通过mongodb实现地理附近查询
 		def point = [longitude,latitude]
 		BasicDBObject obj = new BasicDBObject("location",new BasicDBObject('$nearSphere',new BasicDBObject('$geometry',
 				new BasicDBObject("type","Point").append('coordinates', point)).append('$maxDistance', distance)))
 		Query query = new BasicQuery(String.valueOf(obj))
-		def list = mongoTemplate.find(query, Customer,"test")
+		def list = mongoTemplate.find(query, Customer,"geometry")
         'mongo方式 ---------->' + JSON.toJSONString(list.size())
 		// 通过redis实现地理附近查询
 		
@@ -65,6 +64,7 @@ class GeometryApplication {
 		
 		// 统计各个查询的响应时间，返回正确结果
 		// TODO	
+		return JSON.toJSONString(list)
 	}
 	
 	/**

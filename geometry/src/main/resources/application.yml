@@ -15,7 +15,8 @@ spring:
         platform: h2
     data:
         mongodb:
-            uri: mongodb://192.168.99.100:27017/test
+            #uri: mongodb://192.168.99.100:27017/test
+            uri: mongodb://127.0.0.1:27017/geometry
 
 # Tomcat配置
 server:
