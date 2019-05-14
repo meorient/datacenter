@@ -1,6 +1,5 @@
 package com.meorient.geometry
 
-import org.h2.util.CurrentTimestamp
 import org.mybatis.spring.annotation.MapperScan
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication

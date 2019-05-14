@@ -29,3 +29,15 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
+jar {
+	manifest {
+		attributes(
+				"Manifest-Version": 1.0,
+				"Main-Class": "com.meorient.geometry.GeometryApplication")
+	}
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	into('assets') {
+		from 'assets'
+	}
+}
