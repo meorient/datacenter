@@ -17,4 +17,7 @@ class Customer {
 	def confidence
 	def comprehension
 	def precise
+	def limit
+	def keyword
+	def details
 }

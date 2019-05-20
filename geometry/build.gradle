@@ -14,30 +14,16 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.codehaus.groovy:groovy'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'com.alibaba:fastjson:1.2.58'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1'
-	compile 'org.springframework.boot:spring-boot-starter-data-mongodb:2.1.4.RELEASE'
-	compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '3.0.0-alpha-4'
-	compile 'org.springframework.boot:spring-boot-starter-web'
-	compile 'com.alibaba:fastjson:1.2.58'
 	
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'mysql:mysql-connector-java'
+	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-jar {
-	manifest {
-		attributes(
-				"Manifest-Version": 1.0,
-				"Main-Class": "com.meorient.geometry.GeometryApplication")
-	}
-	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-	into('assets') {
-		from 'assets'
-	}
 }

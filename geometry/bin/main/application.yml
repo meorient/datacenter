@@ -7,23 +7,22 @@ spring:
 #        config: src/main/resources/log4j2.xml
     application:
         name: geometry
-#    datasource: 
-#        url: jdbc:h2:file:~/test #//配置h2数据库连接地址 
-#        driverClassName: org.h2.Driver #//配置JDBC Driver
-#        username: sa #配置数据库用户名
-#        password: #配置数据库密码
-#        platform: h2
+    datasource: 
+        url: jdbc:h2:file:~/localH2
+        driverClassName: org.h2.Driver
+        username: sa
+        password: 
+        platform: h2
     data:
         mongodb:
-            uri: mongodb://127.0.0.1:27017/test
-
+            uri: mongodb://10.20.11.249:27017/geometry
+#    redis:
+#        host: 192.168.99.100
+#        port: 6379
+#        database: 1
+         
 # Tomcat配置
 server:
     servlet: 
         context-path: /
     port: 50680
-    
-# mybatis配置(下划线到驼峰的自动转换)
-mybatis: 
-    configuration: 
-        map-underscore-to-camel-case: true
