@@ -5,7 +5,7 @@ package com.meorient.geometry
  * @author chuxu
  */
 class Customer {
-	def extId
+	def extid
 	def name
 	def address
 	def latitude
